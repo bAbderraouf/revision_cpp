@@ -11,6 +11,7 @@
 #include<thread>
 #include<mutex>
 #include <type_traits>  // check type
+#include <functional>  // function object : wrapper generique de fction (callable wrapper)
 
 
 using namespace std;
@@ -34,6 +35,10 @@ template <typename T>
 void Ckeck_type_function(T);
 //---------------------------
 
+// callable wrapper -------------
+void Callable_function_Exampel();
+int Add(int x, int y);
+
 int main()
 {
     //SL_heritageDuC(); // ctime, cstdlib, cctype
@@ -43,7 +48,10 @@ int main()
     //stacks_LIFO();
     //queue_FIFO();
     //threads_();
-    Check_Type_Example();
+    //Check_Type_Example();
+    Callable_function_Exampel();
+
+    
     return 0;
 }
 
@@ -346,4 +354,15 @@ void Ckeck_type_function(T a)
         std::cout << "autre type" << std::endl;
 
 
+}
+
+// callable wrapper (function object)
+void Callable_function_Exampel()
+{
+    int a = 4, b = 6; 
+    std::function <int(int&, int&)> f = Add;   // <type de retour (para1 &, para2 &)> nom_fct = fction_to_call
+    std::cout << "a+b = f : " << f(a,b) << std::endl; 
+}
+int Add(int x, int y){
+    return x+y;
 }
