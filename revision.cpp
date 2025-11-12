@@ -12,6 +12,7 @@
 #include<mutex>
 #include <type_traits>  // check type
 #include <functional>  // function object : wrapper generique de fction (callable wrapper)
+#include "opp_overloading.h"
 
 
 using namespace std;
@@ -39,6 +40,10 @@ void Ckeck_type_function(T);
 void Callable_function_Exampel();
 int Add(int x, int y);
 
+// opeartor overloading
+
+void Operators_overloading_Example();
+
 int main()
 {
     //SL_heritageDuC(); // ctime, cstdlib, cctype
@@ -49,9 +54,10 @@ int main()
     //queue_FIFO();
     //threads_();
     //Check_Type_Example();
-    Callable_function_Exampel();
+    //Callable_function_Exampel();
+    Operators_overloading_Example();
 
-    
+
     return 0;
 }
 
@@ -365,4 +371,25 @@ void Callable_function_Exampel()
 }
 int Add(int x, int y){
     return x+y;
+}
+
+//  Operators_overloading
+void Operators_overloading_Example(){
+
+    // tests d'affichage pour chaque operator
+    Point p1(3,3) , p2(2,2) , p3;
+
+    std::cout << "p1" << p1 << " & " << "p2" << p2 << std::endl;
+    p3 = p1 + p2;
+    std::cout << "p1 + p2 = p3 " << p3 << std::endl;
+
+    p3 = p1 - p2;
+    std::cout << "p1 - p2 = p3 " << p3 << std::endl;
+
+    p3 = p1 * p2;
+    std::cout << "p1 * p2 = p3 " << p3 << std::endl;
+
+    std::cout << "p1 == p2 ? " << (p1 == p2) << std::endl;
+    std::cout << "++p1" << ++p1 << std::endl;
+
 }
