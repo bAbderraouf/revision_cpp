@@ -28,9 +28,11 @@ void driveCar(string driverName);
 void threads_();
 //-----------------------------
 
-template <typename T>
+// check type --------------
 void Check_Type_Example();
+template <typename T>
 void Ckeck_type_function(T);
+//---------------------------
 
 int main()
 {
