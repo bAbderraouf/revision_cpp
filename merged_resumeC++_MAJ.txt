@@ -1,0 +1,1009 @@
+// à rajouter au resumé c++
+//a partir du chapitre des conteneurs
+
+
+=========================la SL standard Library =========================
+
+SL = 3 parties :
+	1- heritage du C (ctime:mesure de temps, cctype: analyse des lettres
+		cstdlib: gen de nbre aleatoire)
+	2- les flux : cin, cout, fstream
+	3- STL (standrad template library)
+
+--------------------------------------------------
+
+cctype : 
+	isalpha()
+	isdigit()
+	islower()   and  tolower()
+	isupper()   and  toupper()
+	isspace() : espace ou /n
+	ispunct() : !"#$%&'()*+,-./:;<=>?@ etc 
+expl : if(isalpha(chr)){ chr = toupper(chr) }
+
+ctime :
+    int secondes = time(0);
+    cout << "Il s'est ecoule " << secondes << " secondes depuis le 01/01/1970." << endl;
+
+cstdlib :
+	srand(time(0)); // init la suite des nbre aleatroires, pour avoir un rand different
+			// rmq : a mettre toujours dans le main et pas dans la fct (1seule fois)
+	nb = rand() % 10; 
+
+==========================STL==================================
+
+1) Containers : used to store the data
+2) Algorithms : used to process the data
+		predefined algo to handle the data => we can also custom our algos (fonctors)
+3) Fonctors :  a customised algorithms (function objects).
+4) Iterrators : the way we use to navigate throught the data
+5) Templates : generic code
+
+=========================Contenneurs  =========================
+A) sequentiels :
+	- vecteur
+	- list
+	- deuque : double ended
+	- array : taille fixe
+B) associatif:
+	- set : ordoné, pas de doublons, acces rapide, recheche 
+	- multiset : = set mais avec doublons, ordoné
+	- map : clés, val, ordoné, pas de doublons, acces rapide, recherche
+	- multimap : = map mais avec doublons,
+C) No ordonées (tab de hachage)
+	- unnordred_set :
+	- unnordred_map
+D) adaptatif :
+	- stack : Pile, LIFO, basé sur un vecteur ou deque
+	- queue : File, FIFO, basé sur un conteneur comme deuque
+	- priority_queue : recuperer l'element avec prio la + elevée
+-------------------------------------------------------------------------
+1-methodes communes:
+	empty()	 // a.empty() si vide ou pas
+	clear()
+	swap()   //a.swap(b) permuter 2 conteneurs du mm type
+
+	push_back()
+	pop_back()
+	front()   : acces a la 1er case
+	back()	  : acces a la derniere case
+	assign()  : modification du contenu
+
+	begin() : renvoie un iterator sur le 1er elt
+	end() : renvoie un iterator sur la fin du conteneur
+
+rmq : acces au elements se fait via [] ou via iterrators
+
+--------------------------------------------------
+
+-deque (double ended queue) :     ...xxxx...
+				  ^
+	le 1er elt a tjr l'indice 0
+	push_front()
+	pop_front()
+--------------------------------------------------
+
+-Stack (pile : LIFO ) : acces qu'au dernier elt
+	pop() : supp le dernier elt
+	top() : consulter le dernier elt
+	push() : ajouter un elmt
+
+--------------------------------------------------
+
+-queue (file : FIFO) : acces qu'au 1er elt
+	123456...>push()
+	^pop()
+	front() : consulter la 1er case (au lieu de top)
+	
+hip()
+
+--------------------------------------------------
+
+-priority_queue (une file qui ordonne ses elements)
+
+--------------------------------------------------
+
+-List (pas cote a cote dans la memoire) : liste chainees
+	begin()-->1 > 2 > .. --> end()
+	chq case a un pointeur vers la prochaine
+   rmq : pas de [] pour les listes on doit passer par les iterators
+
+--------------------------------------------------
+
+-Map (cles, valeur) : 
+ iterator.second() : valeur
+ iterator.first() : clé
+ rmq : [] sil ne trouve pas l'elt => il le crée (pas pratique pour chercher)
+ solution => 
+	methode find() : si n'existe pas=> renvoie end()
+
+
+--------------------------------------------------
+
+choisir le bon conteneur : lien image
+https://user.oc-static.com/upload/2022/01/26/164319655236_P2C2-4.png
+
+
+============================================ Algorithm =========================================
+A) Algo de recherche:
+	- find : 	auto it = std::find(begin, end, value);
+2) Algo de tri :
+	- sort : 	std::sort(begin, end);
+	- stable_sort : std::stable_sort(begin, end);
+	- partial_sort : std::partial_sort(begin, middle, end);
+3) algo de transformation
+	-
+
+============================================ les iterateurs ====================================
+
+-1 iterateurs : obj ressemblent aux pointeurs
+
+methodes propres aux iterateurs :
+	insert() : ajout d'un elt au milieu d'un conteneur
+	erase() : supp un elt au milieu d'un conteneur
+   exple : vect.erase( vect.begin() )
+
+rmq : il existe 5 types d'iterators mais 2 sont utilisé
+types :
+	-bidirectional iterator:  ++/-- sur les conteneurs (augmenter seulement 1 elt a la fois)
+	-random access iterator: acceder directement au milieu d'un conteneur
+		expl : vector<int>::iterator it = tab.begin() + 7; //Un itérateur sur le 8ème élément
+
+	-Les itérateurs sur les flux entrants.
+	-Les itérateurs sur les flux sortants.
+
+============================================= les foncteurs =========================================
+
+2- foncteurs : obj comme fonctions (version object d'une fonction)
+	lorsq on veut appliquer une fonction sur les elts d'un conteneur =>
+         on doit passer cette fonction en argument de la methode du conteneur =>
+	   mais on ne peut passer que des objet en argument pas des fct => d'ou les foncteurs
+
+-------------------------------------------------------------------------------------------------
+-créer un foncteur : un foncteur est une classe qui doit proposer un operateur() qui fait l'operation souhaité
+
+class Addition{
+public:
+    
+    int operator()(int a, int b)   //La surcharge de l'opérateur ()
+    {
+        return a+b;
+    }
+};
+// dans le main 
+    Addition foncteur;
+    int a(2), b(3);
+    cout << a << " + " << b << " = " << foncteur(a,b) << endl; //On utilise le foncteur comme s'il s'agissait d'une fonction
+
+
+-------------------------------------------------------------------------------------------------
+- les foncteurs évolutifs = foncteur + attribut 
+	ça donne une sorte de memoire car on exucute la fct avec differentes valeurs a chq fois
+	foncteurs avec attribut == fonction avec static var en C
+
+-------------------------------------------------------------------------------------------------
+- les predicats  = foncteurs particulers
+	1argument => return bool (servent a tester l'object passé en argument)
+
+-------------------------------------------------------------------------------------------------
+- les foncteurs predefinis dans la STL :
+	#include <functional>
+
+-------------------------------------------------------------------------------------------------
+- Fusionnez les deux concepts (conteneurs + foncteur) :
+	exple : objectif : modifier le comportement d'une map.
+
+// foncteur :
+class CompareLongueur
+{
+public:
+    bool operator()(const string& a, const string& b)
+    {
+        return a.length() < b.length();
+    }
+};
+
+// main
+  map<string, double,CompareLongueur> poids;  //On utilise le foncteur comme critère de comparaison
+// les elts de la map seront triés par ordre croissant des tailles des str 
+-------------------------------------------------------------------------------------------------
+=================================== les itérateurs sur les flux =================================
+-------------------------------------------------------------------------------------------------
+#include <iteraror>
+-Les itérateurs sur les flux sortants. (ofstream : o => out)
+	ostream_iterator<double> it(cout , ":");     // : est le delimiteur
+	*it = 2.5;
+	*it = 0.5;
+	resultat :  2.5 : 0.5 :
+
+
+-Les itérateurs sur les flux entrants. (il faut le faire avancer avec le ++)
+  // lire 2 mot sur un fichier
+    ifstream fichier("C:/Nanoc/data.txt");
+    istream_iterator<double> it(fichier); 
+
+    double a,b;
+    a = *it;    //On lit le premier nombre du fichier
+    ++it;       //On passe au suivant
+    b = *it;    //On lit le deuxième nombre
+  // lire jusqua la fin du fichier
+    ifstream fichier("data.txt");
+    istream_iterator<double> it(fichier); //Un itérateur sur le fichier                           
+    istream_iterator<double> end;         //Le signal de fin
+
+    while(it != end)   //Tant qu'on n'a pas atteint la fin
+    {
+        cout << *it << endl;  //On lit
+        ++it;                 //Et on avance
+    }
+
+-------------------------------------------------------------------------------------------------
+=================================== les templates =================================
+-------------------------------------------------------------------------------------------------
+template<typename T>   ou template<class T> 
+T fonction( const T& a, const T& b)  // const si jamais le type est volumineux on evite les copies unitiles
+{
+	return a+b;
+} 
+int main()
+{	double a, b;
+	cout << fonction<double>(a,b);  // pas necissaire de specifier le type, mais parfois si
+}
+
+rmq : la definition + le prototype d'une fonction template doivent etre sur les .HPP (.h)
+	si on veut utiliser un object comme type il faut verifier la surcharge des operateurs, (+) doit exister par exple
+on peut definir 2 types a la fois :
+template<typename1 T, typename2 S>   // mais il faut indiquer le type lors de lappel
+fonction<int, double>(a,b)
+
+
+-------------------------------------------------------------
+CPE certificate :
+cout << [manipulator] << variable ;   
+	manipulators : hex, oct, dec     
+	ou bien : setbase(16) ... #include iomanip
+	ou bien : cout << bitset<8>(s) ;   ...  #include bitset  (le 8 c le nombre de bits a afficher)
+	
+	cast :   cout << (int)char 
+	1.0 est vu comme un double par le compilateur (un double n'est pas un float mais un float peut etre un double) => solution 1.0f (float)
+	void *ptr : un pointeur qui peut pointer sur nimporte quel type (mais *ptr est interdit par le compilateur 'le dereferencement')
+
+bitwise : 
+& (ampersand)	bitwise conjunction
+| (bar)	bitwise disjunction
+~ (tilde)	bitwise negation
+^ (caret)	bitwise exclusive or
+
+priority table :
+
+	+ -	unary
+	* / %	
+	---------------
+	+ -	binary
+	< <= > >=	
+	== !=	
+	= += -= *= /= %=
+--------------------------------------------------------
+Functions :
+	void f1() { return;}  // si le type de retour est void on peut utiliser return sans valeur
+	f1(int i, int j=1)  // default paramettre
+	inline function :
+		un appel d'une fonction s'execute en 2 etape : prologue(avant la fction) et epilogue(après)
+			prolgoue : code qui s'execute avant la fct mettant les parametres dans la stack
+			epilogue : etape qui vide la stack et transfere le resultat de la fct
+		en resumé : main => prologue => fonction => epilogue => main  (economie de memmoire "compact" => mais moins rapide)
+		donc : plusieurs appel de la mm fct => perte de temps => le mieux est de faire des inline fonctions
+		declaration :
+			inline int function(int parameter)    or    int inline function(int parameter)
+--------------------------------------------------------
+conversions : 1. automatic conversion : le compilateur qui fait le travail 
+			expl: long a = 1L // L pour dire que c'est un long
+	      2. explecit conversion : le cast
+		a- le c cast : (new_type_name) expression_of_old_type    :   (int)(double_var);
+		b- functional notation(ta3 C++ valable pour les objets) :  new_type_name (expresssion_of_old_type) :  int(float_var)  
+
+--------------------------------------------------------
+strings :
+	input str :
+		1. cin >> str  // va s'arreter au premier espace
+		2. getline(cin , str) ;
+	comparaison :  
+		1. avec " == " ou  " < et > " (ordre alphabetique)
+		2. avec str.compare(str2)  : return 0 ==, < 0 (str<str2) , >0 str > str2
+			str.compare(sstr_start, sstr_length, str2)
+			str.compare(sstr_start, sstr_length, str2,  sstr2_start, sstr2_length)
+	substring :
+		str.substr( start_idx , end_idx ) // defaults start_idx = 0 , end_idx = n-1
+	length :
+		str.size() == str.length()
+		str.capacity() : size of currently allocated buffer (ki nzidolo yzid)
+		str.max_size() : max size   
+		str.reserve(size) : pour limiter la capacity (sans toucher au contenu).
+		str.resize(size , 'c') : pour modifier la taille du string en remplissant avec des 'c'
+		str.clear() : effacer le str
+	search :
+		str.find( s, start_idx = 0) // s peut etre string ou char.
+		it returns an int,  if fail it returns string::npos
+	append :
+		1. avec " + " ou " += "
+		2. avec str.append() : plus d'options
+			full str : 	 str.append(str2)	
+			part of an str : str.append(str2, start_idx , nbrOfChars)	
+			list of chars :  str.append(nbreOfChars , char)
+			char :		 str.push_back(char)
+	insertion :
+		str.insert(start_idx , str2) : il existe plusieurs autres options
+	assign : 
+		str.assign( nbreOfChars , char)
+	replace substr:
+		str.replace(star_idx , nbreOfChars , str2 , strat_idx , nbreOfChars)
+	erase a substr :
+		str.erase()   // erase all 
+		str.erase(start_idx , nbreOfChars)
+	swap 2 strs :  (very fast than permutation, juste un changement de pointeurs)
+		str.swap(str2)  
+
+----------------------------------------------------------------------------------------------------------------
+name spaces :
+	declaration : namespace monNameSpace{ code ici ...}
+	utilisation : monNameSpace::maVariable;
+	using namespace Nom_nameSpace { il n'est utilisé que ici pas a lexterieur des accolades}
+	using namespace Nom_nameSpace ;  // la façon globale a eviter
+	on peut avoir plusieurs namespaces avec le mm nom (ce sont des extensions du mm namespace: plusieurs devlpeurs peuvent le faire sur plusieurs fichiers)
+	il existe des namespaces sans nom (on peut acceder a leurs elements sans preparation)
+	rename a namespace :  namespace NewName = OldName (les deux peuvent etre utilisé en mm temps)	
+
+----------------------------------------------------------------------------------------------------------------
+classes :
+	inheritance :  class fille : mere  {};
+	constructeur :	fille::fille : mere() { //consturcteur fille }   // il faut appler le constructeur de la classe mere avant.
+	class anatomy :
+	  - assignement : 
+		value = value
+		class::value = value
+		this->value = value
+
+	  - constructors : 
+		we can overload constructors
+		copy constructor :  pour créer un objet apartir d'un autre
+			- declaration :    class_name( class_name const &obj1){ var1 = obj1.var1; }
+			- appel : class_name obj2 =  obj1; or 
+				  class_name obj2(*obj1)
+	  - auto keyword :    by default all variables are auto (expl : auto int var)
+	  - static variable : elle ne sera pas supprimé de la memmoire a la fin de la fonction 
+	  - static component (variables) : pareil mais elle doit etre initialisée a l'exterieur de la class et declaré a l'interieur (utile pour les counters)
+			- declaration : 		public : static int counter;  // on le declare dans les publics ou privé (acces non autorisé)
+			- intitialisation : 		int class_name::counter = 0; // initialisation
+			- acces outside the class:	cout << Class_name::counter;    or cout << obj.counter ;
+			- acces inside the class : 	cout << counter;
+	  - static component (functions) : can be accessed withoun creation of any instance of the class
+		static component cant acces a non static one, everything else is ok
+	  - pointers to objects :   (toutes les objets "variables" sont stocké dans une zone memoire appelé stack "pille").
+			- Class_name *ptr;     
+			- ptr = new Class_name();
+
+	  - La RAM : 4 parties :
+			- source code : .exe du code
+			- static/global:  
+			- stack : 	variables / fucntions / fucntions calls ... (geré automatiquement)
+			- heap : 	c'est ce qui reste dans la ram, c'est a nous de le gerer.
+	  - la stack : (on peut pas le controler : c'est automatique ) zone memoire pour stoquer tout les objets crée  (sa taille change au cours de l'execution du programe)	
+		stack overflow : appel infinie de fonctions
+	  - la heap :  (on peut la gerer) lors du new/delete (malloc/realoc/free) via un pointeur
+	  - obj2 dans une clasee1 : le constructeur de l'inner object est evoqué avant celui de la classe1
+				public class2 obj2;
+				dans ce cas on peut selctionner le constructeur de l'inner object a utiliser car sinon il va utiliser celui par default.
+					class1 obj2 , obj1;
+					classe2(void) : obj1(arg) , obj2(args) {}	// le constructeur de obj2 est evoqué en premier (selon l'ordre de la declaration)
+--------------------------------------------------------
+	  - I e :
+		syntaxe :  class subClass:{visibilty specifier} superClass1, superClass2, superClassN {...};  
+				rmq : 	par defaaut la visibilty est privée (tout les composants public de la superClass devienennt privée) 
+					si la visibilty est protected => tout les composants public et protected devienennt protected.
+					l'heritage multiple (from plusieurs superClass) existe mais à eviter.
+		type compatibility :
+				superclass is compatible with subclasse but not the inverse.
+					ie : Pet *a_pet = new dog("roky");  // => a_pet->run() is allowed but a_pet->makeSound() is not allowed.
+						to fix this we can use static cast (to make a temporary conversion).
+				static_cast :    
+						static_cast<new_type>(expression)   // => exple : static_cast<Cat>(a_pet)
+							rmq : le compilateur nous fais confiance => on peut forcer des erreurs, on doit etre sure.
+		functions overriding :
+				si une function dans la supperClass est overridden (hiden by the 2nd one) we can unhide it by using the static_cast (uppercasting)
+						static_cast<*Pet>(a_cat) -> makeSound();  // on utilise la fction de la classe mere.
+		polymorphisme :
+				ds la classe mere : 			virtual fct1(){//definition}
+				override the fct1 in subclass :  	fct1(){// another definition}
+				appel :					class_mere *obj1 = new class_fille()
+					obj1->fct1() 
+
+		dynamic cast :  pour tester si la conversion d'un type a un autre est possible ou pas (pour effectuer des conversion plymorphique securisée car il verifie et renvoi null sinon)
+				if ( *ptr2 = dynamic_cast<ptr1 *>(variable)  )
+				En resumé : static_cast` est utilisé pour des conversions sûres à la compilation (car il ne verifie pas si la conversion est possible, ça peut generer des erreurs)
+					    tandis que `dynamic_cast` est utilisé pour des conversions polymorphiques sûres à l'exécution.
+
+		try catch : 	we use it when we are not sure (exple : when dynamic cast)
+				try {expresssion to test}  catch(...){vide}
+
+		copying constructor :	pour copier le contenu d'un objet vers un autre (forme :    A(A &) )
+				- rmq : si le constructeur de copy n'est pas declaré => on peut utiliser  le constructeur de copy implicite (MAIS ...)
+					- exple : A o  o1 , o3(o1)
+				- mais ça peut causer des pbs lorsqu'on a des variables crées par new ds la class (o1,o2,o3 vont partager la meme adresse memoire de cette variable)
+				  car lorsqu'on utilise new la variable sera a l'exterieur de l'objet (case memoire)
+				- si on passe notre objet en paramtre ds une fction (passage par variable), il doit automatiquement appeler le constructor de copy. ;)
+				- si on veut interdire l'utilisation du constructeur de copy pour forcer le user a se debrouiller autrement selon l'objet on peut le mettre ds private.
+					exple : private : A(A &);  // comme ça il ne sera pas utilisé par le user.
+
+		constructor par default : une classe sans constructeur, elle sera equipée par celui par defaut, mais les variables seron initialisé aleatoirement.
+				- si on declare un constructor, celui par defaut ne sera pas appelé, pour le garder, on peut le declarrer par nous meme comme suit :
+					public : A(void) : var1(0), ..., varN(0) {vide}
+				- ya une methode plus facile : c'est de mettre les valeurs par defaut sur notre seule constructeur (dans la liste deroulante) :
+					public : A(int var1, ... varN) : var1(0), ...varN(0){notre constructeur}
+		
+		a class composition :  c'est de construire une classe a partire de plusieurs autres classses (veh = tole + moteur + ...)
+					- exple :  class veh{ public : moteur m; roues r; ... }
+ 				- rmq : sur la class compo c mieux de créer un constructeur de copy qui fait appel aux constructeurs de copy des sous composants.
+					- exple : Veh(Veh &v) : m(v.m), r(v.r) { cout << "Copying Compo..." << endl; }
+--------------------------------------------------------	
+	- constants : 
+		const variables : read only variables :
+					const int size = 100    or 
+					int const size = 100	are same  =>    int tab[size]
+						rmq : we must initialise a const when declaring it.
+
+		const pointers :	Note that the const keyword is placed after the * and before the variable name – don’t forget this.
+					char * const p = "moi"
+						++p or --p est interdit. 
+						*p = "lui" est possible. car on modifie la variable surlaquelle on pointe et pas le pointeur.
+
+		pointers to constants :	  (c pas pareil que les const pointers)
+					const char * p = "moi"   or
+					char const *p = "moi"
+						++p or --p est possible
+						*p = "lui" est interdit (moi est une constatnte)
+
+		rmq :			const char * const p = "moi"  (pointeur constant et variable constante).
+						--p or ++p est interdit
+						*p = "lui" est interdit
+
+		constante en paramettre de fct : 
+			- passed by value : 3adi	
+			- passed by reference :	interdit 
+
+		variable constante dans une class : possible mais on doit l'initialiser dans une liste deroulante
+					exple : const int i;  
+						Class_name(): i=0 {}
+
+		objet constant :		un objet constant veut dire qu'il ne sera pas modifié + 
+						pas possible d'appler ces fctions membres (sauf si la fct appelé est de type const).
+
+		constant function (membre d'une class) :
+						synthaxe : 	type name(parameters) const { … }	
+
+	- freinds of a class :	It can be a class or function
+				it has access to private and protected data of the class.
+			class as a friend :
+					la declaration que B est friend de A se fait dant A seulement.
+						class A{	friend class B;
+
+				rules :		(comme dans la realité).
+					- a class may be a friend of many classes
+					- a class may have many friends
+					- a friend’s friend isn’t my friend
+					- friendship isn’t inherited – the subclass has to define its own friendships
+
+			function as a friend :
+					syntaxe : class A{	friend void functionName(A&);  // si elle appartien a une autre classe => void className::functionName(A&);
+					same rules + 	we should declare all the protype of the friend function
+						   +	the class should recognize both global and member functions as friends
+
+----------------------------------------------------------------------------------------------------------------
+	- exceptions :  
+			Rmq :	a program will stop when he find an EOF (end of file) : in windows = ctr+Z in linux = ctr+D
+				#include <exception>
+
+			- exception hierarchy :   base class : 		Exception 
+						derived class : 	logic_error	:	algorithm
+									runtime_error   : 	unexpected accident
+			- we use throw before :
+				throw 12345; 		
+				throw string("erreur de division");
+				or it can throw any object type
+			- then :  try {} catch(string &excp){cerr << excp << endl; }
+			- rmq : on peut utiliser les throw dans une fction sans avoir peur d'avoir des fuites de memoire (la destruction des objects se fait normalement sans soucis).
+				si on throw un object d'une classe cet objet ne sera pas detruit avant que le catch soit executé.
+			- how to know if a function is throwing exception :  on voit ça sur le prototype de la fction
+				- void fct1() throw(type);		// expl void fct1() throw(int)
+				- void fct2() throw(x1,x2,..,xn)  // plusieurs types
+				- void fct3() throw() 	// the fct3 throw nothing
+				Rmq : si le programmeur ne tient pas son mot => erreur de compilation
+			Rules / remarks :
+				- on n'a pas besoin de collecter tout les catch sur une seule fonction ou module (ils peuvent etre distrubués un peu partout)
+				- une fct qui ne throw pas qui evoque une fct qui throw lazem ykon 3ndha throw fel prototype. 
+					on declare throw pour toutes les exception qui quittent la fonctions sans prendre note d'ou ça vient.
+					exple    throw (exp1, exp2) ==> fonction(//on catch exp1 donc il reste exp2 donc on declare exp2) throw(exp2)
+			- unexpected exception : si une fct throw une excption alors qu'elle le dit pas, une fonction qui s'appel unexpected() est appelé automatiquement (on ne peut pas la modifier)
+					pour la modifier on peut créer une fction2 et appeler cette fct2 avec set_unexpected( fct2 )
+
+			
+			- Categorizing exceptions : 
+				- the keyword explicit : utilisé pour les constructeurs pour eviter nprte quelle autre façon d'utiliser ce constructeur que celle explicitement definie.
+			- the exception Class :
+				its the base classe, it contains a fction called what()  
+					==>   exple : catch(exception &ex) { cout << ex.what();}	// include <exception>
+			- categories of exceptions :
+				exception 
+					- logic_error : herité de la classe exception (on peut la voir sur la logique du code)
+						- domain_error : 	exceptions when exceed a range
+						- invalid_arguments :	bayna
+						- length_error :	size/lignth illegal values when extend data
+						- out_of_range:		illegal index
+					- runtime_error : on ne peut pas la voir dans la logique du code (il se peut que le code soit correct)	
+						- range_error :		when exced ranges
+						- overflow_error :	results too large to represent a value
+						- underflow_error :	results too small
+					- bad_alloc : 			when invoking new or new[] (when the os cant fulfil the desired memory)
+					- bad_exception :		when a fct tries to throw an exception not specified in the throw specification (pour la captuer il faut 2 conditions):
+										1- dans la spec de la fct il faut declarer "bad_execption" comme type d'exception
+										2 -dans le main il faut appeler " set_unexpected( fct2 )" oû fct2 est à definir au choix avec un throw a la fin.
+				
+				si jamais on veut utiliser une de ces classes on peut créer une classe herité :
+						class maClass_underflow_error : public underflow_error { ..
+			- catching exceptions :
+					Rmq :  - un catch ne catch que le type d'exceptions voulu et ignore le reste, 
+					       - pour catcher tout type d'exception on utilise catch(...){} // mais on ne peut pas manupuler l'object catché ni connaitre son type
+					       - si on a plusieur catch pour un seul try => un seul catch sera executé au plus.
+					       - l'ordre des catchs est important (1er arrivé 1er servis)
+					       - on peut diviser les catch sur 2 levels (via une fonction intermediaire qui fait des catches)
+					       - on peut throw sur des catchs mais ce qu'on throw sera catché sur le level suivant.
+						
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	- opperator overloding :
+		Rmq : on ne doit pas jouer avec les operateurs, on les declare que lorsque c necessaire.
+		- number of arguments : 	as a class member => number of args = n-1   // n = 1 or 2 (number of args of the opperator to overload)
+						as a standalone function => number of args = n
+		- il est interdit de : 	
+				- créer un nv opearteur
+				- changer la priorité des operateurs deja definies
+				- overload operators working with standard data type
+		- regles sur les operateurs :
+						may be implemented as a global function		may be implemented as a member function		type de retour
+			Arethmetic (+-*/%)	:	yes						yes					depends
+			bitwise	 (^|&~<<>>)	: 	yes						yes					depends
+			assignement   (=)	: 	no						yes					a reference to an object.
+			relational(==!= <=< >=>):	yes						yes					boolean
+			relational binary(!&&||):	yes						yes					boolean
+			coumpound assignement   :	no						yes					a reference to an object.
+			(+=-=*=/=&=|=^=>>=<<==) :	
+			prefix inc/dec ++--	:	no						yes					a reference to an object
+			postfix inc/dec ++--	: 	no 						yes 					a reference to an object (+arg : int none)
+																		 pour deferncier postfix & prefix
+			subcript operator []	:	no						yes					a reference to an object
+			fct invocation operatr():	no 						yes					any
+							
+		exples : 
+			operator + :  
+				A operator+(const A &a,const A &b){ return a.text + b.text ;}
+			operator << : 	
+				std::ostream& operator<<( std::ostream &co, const A &a) { co << "text" ;   return co;}
+
+
+	- enumerations :	
+			enum jours {SAMDI , JEUDI , ... , DIMANCHE};			// appel : jours jr = SAMEDI
+				
+
+chpitre 1.5.1.10 
+3.2.1.12 Throw statement in detail (its ok)
+a revoir
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------ CPP ----------------------------------------------------------------------------------------------------------------
+CPP certificate :
+- module 1 : arrays STL containers Algorithms I/O_Library String_Library Numeric_Library iterators utilities.
+   - STL : solutions for many problems, most important parts:
+		- containers	- input/output	- numeric Lib	- utilities	- regular expression	- thread support
+		- algorithms	- strings	- iterators	- localizations	- atomic operations	- concepts
+	- Containers : 
+		exple : array limitations : 	1- cannot change its size, 	2- cannot know its size, 
+						3- cannot check the index , 	4- an array = 1 big memory block
+		-1) sequetial containers : 	vector	
+						list	
+						deque
+		-2) associative containers :	set /multiset
+						map /multimap
+		-3) container adaptors :	stack
+						queue / priority_queue
+	- Algorithms : defined fctions to transform data stored in containers.
+		- non modifiying/modifiying sequence operations 	- binary search
+		- sorting						- heap operations
+		- set operations					- min/max operations
+	
+	- Input/output library : all kinds of I/O, console & files (cout & iostream)
+	
+	- String library : its considered as a container (the class is not perfect)
+	
+	- numeric library : related to math word, 
+		- complex class
+		- valarray class : special kind of array that allows specific mathematical
+	
+	- iterators:
+		- input / output iterator	- forward iterator
+		- biderectional iterator	- random acess iterator
+		
+	- utilities :
+
+	----------------------------------------------------------------
+	
+	Sequential containers  :	vectors, list, deque.
+		vectors :
+			constructors :  - default constructor definition & example :
+						explicit vector (const Allocator & = Allocator ());  //definition
+						vector<int> v; // si c un obj il faut pas oublier explicit sur son constructeurs
+					- initializing 
+						explicit vector (size_type n, const T & value = T (), const Allocator & = Allocator ()); //def
+						vector<int> v(5,0)
+					- itterator constructor (constructing vectors):
+						template < class InputIterator >
+						vector (InputIterator first, InputIterator last, const Allocator & = Allocator ());  
+						vector<int> v2(v1.begin() , v1.begin() + 5) // creation a partir d'un existant (le 1er inclusif et le 2eme exclusif) [,[
+						vector<int> v3(t , t +3)       	           // ça passe avec des pointeurs ordinaires 
+					- copy constructor :
+						vector (const vector < T, Allocator > &x);
+						vector<int> v2(v1);  
+
+		deque : pas besoin de faire une realocation de memoire (liste double chainée) on peut ajouter des elts des 2 cotés.
+			constructors : exactement pareil pour les vectors ( le 1er elmts a tjr l'indice 0)
+			famous application of deque : undo program.
+
+		list : double linked list aussi (fast insertion / deletion anywhere in its range)
+			les 2 seuls desavantages par rapport aux vecteurs :
+				1- est le random access mecanisme "operator[]"
+				2- la consomation de memoire (additional data required to keep linking).
+	
+	iterrators : similar concept of pointers (5kinds) 
+		tout les contenaires sont composé de 
+			iterator – read/write iterator type
+			const_iterator – read-only iterator type : on ne peut pas assigner des valeurs pour les consts
+			reverse_iterator – reverse iterator type (iterates from the end to the beginning)
+			const_reverse_iterator – as above, but read only.
+
+		methods : (lors de l'initialisation) 
+			begin() ..
+			end() : l'element après la fin de la selection.
+			rbegin() : le dernier element de la selection (ordre inverse)
+			rend() : l'element avant le debut de la selection(ordre inverse)
+				rmq : chq methode peut etre normale ou const (regarde en haut) : exple begin() const
+	
+		types :
+			random access
+				Bidirictional
+					forward
+						input or output
+		
+		operations :
+			size() 	
+			max_size()	
+			empty()		: true if empty
+			resize(newSize , value)
+			vector::capacity() : alocated size en binaire(0 1 4 8 16..) (cpacity >= size)
+			vector::reserve(new capacity) : alloue un espace supplimentaire 
+			front()		: return reference du 1er elmt, pour afficher ou pour le modifier
+			back()		: last elmt .. pareil
+			[] operator 	: list & deque only , il ne verifie pas l'idx donc on peut mettre idx >>
+			at()		: vect & deque only 
+			assign()	:  2 constructeurs : 	v.assign( iterator first, iterator last)
+								v.assign( size , value) // remplir avec value
+			insert()	: 3 constructeurs	it = v.insert( iterator position , valeur) // return iterator
+								v.insert( it position , it start , it end) // remplir avec [start, end]
+								v.insert( it position , size , value) // remplir avec value
+			erase()		: 2 constructeurs	v.erase(it position) // return iterator to the 1st elmt
+								v.erase(it first , it last)
+			swap()		: swap the content of 2 collections of the same type v1.swap(v2)
+			clear()		: remove everthing and set size to zero (and call the destructor)
+			push_back() & pop_back() 	:	ajouter / supp le dernier elmt
+			push_front() & pop_front()	: 	kif kif
+			------------------------------------------------------list only----------------------------------------------
+			list::splice()			: 	move elmts of a list to another list (in a specified position)
+					: 3 constructeurs:	l1.splice(it position, l2)
+								l1.splice(it position, l2 , it idx_in_l2)
+								l1.splice(it position, l2, it first, it last)
+			list::remove()	: remove all values of the list equal to value	l1.remove(1) // remove all 1 values
+			list::remove_if()	: 	l1.remove( func() )   // bool func(type){ ....}  remove when true is returned
+			list::unique()		:	l1.unique()  // supp les elts identiques successifs
+			list::merge()		: 2 constructors : 	l1.merge(l2)   // za3ma dans l'ordre (l2 sera vidé)
+									l1.merge(l2, compare)  //
+			list::sort()		: 2 constructors :	l1.sort()  // ascending
+									l1.sort(compare) // selon compare
+			list::reverse()		:	l1.reverse()  // inverse l'ordre
+			
+
+	-------------------------------------------------------------
+	adaptors container :  stack queue priority_queue
+	 1- stack: pile (LIFO)
+		constructor :	- default : explicit stack (const Container & cont = Container ());
+						stack<int> s1;
+				- using predefinde container :
+						 	deque<int> d1(tab, tab+10)
+							stack<int> s2(d1);
+				- using non default storage :		
+						stack < int , list<int> > s1;
+				- copy    : stack (const stack & other);
+						stack<int> s1(s2);
+		assignement opp= : copy all contents from a same type stack
+					s1 = s2  // lazem ykono meme type de donnée et mm type de contenaire.
+		destructor :	
+		empty()		: true if empty (just a proxy, it calls the methode in the underlying container)
+		size()
+		top()	:  reference de lelement dans le top de la stack // = back() du conteneur utilisé,
+		push(value) :  // = push_back()
+		pop()	    : 	remove the top element of the stack // = pop_back() , rmq elle ne retourne pas l'element (void)
+					
+
+	2- queue : fille (FIFO)
+		constructor : pareil que les stacks
+		assignement opp= : pareil
+		empty() 	size()	
+		front()		: reference de l'element au debut de la fille
+		back()		: ref  ....	....	a la fin .. 	...
+		push(value)	: ajouter a la fin
+		pop() 		: remove the 1st element
+
+	3- priority queue : fille de priority , jyaha (kima les queue bark fihom algo pour avoir le prioritaire, et ça marche 
+			seulement avec les vectors et deuques)
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Standard version (informal name)	Years	Main features
+C++ 1.0/2.0	1983-1998	object oriented language, templates, etc.
+C++98	1997-2003	first international standard for C++
+C++03	2003-2010	standard revision, bug fixes, value initialization
+C++11	2010-2013	auto (type deduction), lambdas, uniform initialization syntax, delegating constructors, deleted and defaulted function declarations, nullptr, rvalue references, etc.
+C++14	2014-2015	generic lambdas, rewoked memory managment, make_unique, deprecated, etc.
+C++17	2016-2018	if constexpr, variant, if and switch with initializer, structured bindings, removal of trigraphs, template deduction of constructors, etc.
+C++20?	2019-2021?	?
+
+
+resumé : 
+c++11 : auto (type deduction), 
+	lambdas, 
+	nullptr de type nulptr_t (pour remplacer NULL"macro int")
+	smart pointers : pointeurs implimenté comme un objet, destruction automatique des pointeurs pour eviter memory leaks.
+		(unique_ptr : 1seul owner (1seul pointeur sur 1 obj)
+		 shared_ptr : plusieurs ptr pointent sur un mm obj , memoire liberée si tt les ptrs sont supprimées
+		 weak_ptr: ptr sur un shared_ptr)
+c++14 : generic lambdas, 
+	multithreading++, 
+	make_unique
+c++17 : if & switch avec initialiser if(int x = 5; x>2)
+	structured bindings (auto [nom, age, adresse] = maStructure) : extract data from struct
+	if constexpr : select what to compile & what to execute depending to a condition
+c++20 : compilation conditionnelle++
+
+
+c++ 11 -> 14    auto, const
+c++ 14 -> 17 	templates++, fction_constexprs, fold_expresssion, pointeurs de fonctions++, this, 
+		amelioration de syntaxe : operateur de decompresssion (...), copy des objets
+c++ 17 -> 20	les modules (organiser le code), les concepts, flux d'E/S synchrone, les pointeurs intelligents (+compteur de ref atomique)
+
+-------------------------------------------------------------------------------------------------------------------
+lambdas : anonymous functions that can be used at the same place where they are defined. 
+	  allows to write inline functions without the need to specify a name or a return type. 
+   [capture_type](parametres){} -> returnType {definition}
+	cpature type : from external scope : by reference [&], by value [=] , both [&a, b] 
+
+-----------------------------------
+generique lambdas :
+-----------------------------------
+	
+	template<typename T>
+	auto lambda_generique = [](const T& x, const T& y) { return x < y; };
+
+--------------------------------------------
+ Smart pointers :
+--------------------------------------------
+smart pointers : pointeurs implimenté comme un objet, destruction automatique des pointeurs pour eviter memory leaks.
+	include <memory>
+	(unique_ptr : 1seul owner (1seul pointeur sur 1 obj)
+		unique_ptr<object_type> ptr1 = make_unique<object_type>() ; // constructor , dereferencement avec un *
+			detruit : when its out of scope.
+			rmq : pas copiable et pas de compteur    // std::unique_ptr<Robot> p2 = p1;  ❌ Erreur compilation
+			rmq : on ne peut pas créer un 2eme ptr qui pointe sur le mm obj => solution : std::move
+		unique_ptr<object_type> ptr2 = move(ptr1);  // le ptr1 va valoir nulptr
+
+	 shared_ptr : plusieurs ptr pointent sur un mm obj , memoire liberée si tt les ptrs sont supprimées
+		shared_ptr<obj_type> ptr1 = make_shared<obj_type>();
+			rmq : copiable // std::shared_ptr<Robot> s2 = s1;
+			rmq : the nbre of owner = ptr1.use_count() 
+				la memoire se libere si le tout les shared pointeurs ne pointe plus sur cet objet (each one is detruit lorsqu'on sort de son scope)
+	 
+	weak_ptr: ptr sur un shared_ptr)
+		// il ne laisse pas un objet vivant mais un shared_ptr will keep it.
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+constexpr en C++ signifie que l'expression ou la fonction peut être évaluée à la compilation, si possible. // (in cpp 11)
+
+if constexpr( cond) { // code a compiler et executer if cond } else {// code a compiler et executer if !cond }  // (in cpp 17)
+
+listes et vectors :
+	une liste : si on veut ajouter/supprimer des éléments fréquemment, 
+		    insertion plus rapide car seuls les 2elmts sont a modifier par contre les vecteur tt est a deplacer.
+	un vecteur : accès rapide et efficace aux éléments stockés (taille initiale, si on depasse => un nv vect va etre crée).
+			moins d'espace car les elmts sont cote a cote en mememoire (moins de fragmentation)
+	map : 	     utilise un arbre binaire de recherche équilibré (arbre rouge noir)
+
+design pattern : repeatble solutions for commun occured problems used in softwr dev.
+	creational : how to create objets
+		sigleton : 1seul et unique instance est crée : 
+			how : methode static pour créer des instances + constructeur privé
+		prototype : un objet qui prends du temps pour etre cree => solution(on fait une copie du 1er object crée et l'utilise
+		        rmq : elle doit contenir 2 methodes (shallow et deep copy)
+		factory : (trés utilisé) based on polymorphism
+	structural : how to organize objets in a system
+	behavioral : how objects interact with each other.
+
+multithreading : (from c++11) multithreading (+ of 2 tasks in paralel + of 2 cores) != multitasking (switching between tasks, not realy in paralel)
+	include<thread>
+	function1(x),2(y)  // definitino
+	appel :	std::thread t1(function1, x) , std::thread t2(function2); // x: est un parametre de la fct1
+	attendre : t1.join() // attendre la fin de t1 avant de finir le program.
+
+
+abstraction : se fait via 2 façons :
+	-interfaces  = classe avec que des methodes virtual pures et pas de données membres 
+	-abstract class = classe contenant des methodes virtual pures mais elle peut contenir des données membres.
+
+
+agregation : un obj1 contient un autre obj2 sans qu'il soit proprietaire sur l'obj2. (effectuée par reference ou ptr)
+	class voiture { moteur *m ; // agregation dun moteur ds la voiture.
+
+composition : bayna
+UML ..etc : lucidchart application
+
+=============================================================================
+#define NDEBUG  // pour desactiver assert (generalement après le deploiment du program)
+#include <cassert>
+assert( denominateur != 0)
+
+rmq : difference entre exception (exist dans le prgrame finale, geerer une erreur imprevue, peut arreter le prgm) et 
+	assert (existe pas, geerer une supposition pendant le debug, arret de prgm)
+====================================================================================================
+--------------------------------POO Modelisation---------------------------------------------------
+
+Abstraction	Masquer les détails et ne montrer que l'essentiel.	
+		exple : Classe Animal avec méthode abstraite speak().
+
+Encapsulation	Masquer l'état interne et accéder via des méthodes.	
+		exple : Variables privées avec getters/setters.
+
+Héritage	Une classe dérivée hérite des propriétés d'une classe de base.	
+		exple : Dog hérite de Animal.
+
+Polymorphisme	Une même interface permet de traiter différents types d'objets.	
+		exple : Appeler speak() sur un Animal* (pointeur de base) qui référence un Dog ou un Cat.
+
+Classe abstraite : Peut avoir des méthodes abstraites et concrètes, 
+		   des variables membres, et un constructeur. 
+		   Elle sert de base pour d'autres classes qui peuvent partager une implémentation partielle.
+
+Interface : 	toutes les méthodes sont abstraites, 
+		Pas de constructeur.
+		Ne peut pas avoir de variables membres.
+		pas de methodes concrétes 
+		sert à définir un contrat que les classes dérivées doivent suivre sans fournir d'implémentation.
+
+Agrégation : 	relation entre deux classes (classe qui contient un object d'une autre classe)
+		rmq : la partie peut exister sans le tout (student peut exister sans school)
+		exple : class school contient un objet *student
+
+composistion :	plus forte que l'agrégarion 
+		rmq :(des pieces ne peuvent pas exister sans une maison)
+
+association : 	les deux peuvent exister indépendement (classe book et class author)
+		author peut avoir plusieurs books et le book aussi peut avoir plusieurs authors
+
+Classe utilitaires : elle ne contient que des methodes static pour qu'ils soient appelées sans création d'object.
+
+---------------------------------------mots clés ------------------------------------------
+
+override : Garantir que la méthode de la classe dérivée redéfinit correctement une méthode virtuelle de la classe de base.
+		pour forcer la verification (si faute de frappe sans override le compilateur va créer une autre methode)
+		exple : void greet() override { // ...
+
+= default : définir une méthode spéciale (comme un constructeur ou un destructeur) avec une implémentation par défaut.
+		exple : MyClass() = default; // constructeur
+
+= delete : interdire l'utilisation explicit d'un constructeur copie
+		exple :  MyClass(const MyClass& other) = delete;
+
+explicit : rendre le constructeur explicit pour eviter la conversion automatique qui engendre des erreurs
+		empêche la conversion implicite lors de l'initialisation d'un objet avec un type différent.
+		exple :  explicit MyClass(int x) {  //...
+
+noexcept :  indique qu'une fonction ne lance pas d'exception pour ameliorer la performances de compilation. 
+		exple : void myFunction() noexcept {  // ...
+
+ziada==> 
+
+alignas 	Contrôlent et interrogent l'alignement en mémoire.
+et alignof
+
+volatile	Indique qu'une variable peut être modifiée de manière imprévisible (par du matériel ou des threads).
+
+LValue	: 	on peut pointer sur elle avec un ptr, on peut y affecter une valeur
+
+RValue	: 	elle na pas dadresse, (valeur temporaire) non modifiable, souvent retourné par une expression.
+
+std::move : 	converti une valeur en une RValue (val temporaire) pour la transferer au lieu de copier ( eviter les copies couteuses)
+		string str = "Raouf";
+		string movedStr = std::move(str); // transfert du contenu de str vers movedStr (str sera vidé)
+
+nullptr :       de type nulptr_t (pour remplacer NULL"macro int")
+
+qstions :
+std::move constructor (cpp 14)
+mapp comment sa sorganise (binarie)
+shallow et deep copy)
+
+------------------------------------------------------------------------
+library
+------------------------------------------------------------------------
+	- statique : integré dans l'executable (linked in compile time).
+		linux : .a
+		windo : .lib
+	- dynamique : linked in run time.
+		linux : .so
+		windo : .dll
+
+-----------------------------------------------------------------------------------------------------------
+Critère		Bibliothèque statique (.a / .lib)		Bibliothèque dynamique (.so / .dll)
+-----------------------------------------------------------------------------------------------------------
+- Lien		À la compilation (statiquement)			À l'exécution (dynamiquement)
+- Taille exé	Plus grande (code inclus)			Plus petite (référence seulement)
+- Performance	Plus rapide (pas de chargement externe)		Légèrement plus lent (chargement en mémoire)
+- Mise à jour	Doit recompiler l'exécutable			Mise à jour possible sans recompiler
+- Dépendance	Aucune dépendance externe après compilation	Nécessite le fichier .so ou .dll à l'exécution
+-----------------------------------------------------------------------------------------------------------
+
+-----------------------------------------
+type checking (cpp 11 but 17 is better)
+-----------------------------------------
+
+#include <type_traits>
+
+template <typename T>
+
+void check(T a, T b) 
+{
+    if constexpr (std::is_same_v<T, std::string>) 
+    {
+        std::cout << "C'est une string : " << a + b << std::endl;
+    } 
+    else 
+    {
+        std::cout << "Autre type\n";
+        // on ne tente PAS d'exécuter a + b si ce n'est pas compilé !
+    }
+}
+-----------------------------------------
+std:: function (cpp 11)
+-----------------------------------------
+#include <functional>
+
+int add( int & a, int &b){
+    return a + b; }
+
+int main(){
+
+    int a = 5, b=6;
+    std::function<int(int& , int& )> f = add;
+ 
+    std::cout<< f(a,b);
+    return 0;
+}
