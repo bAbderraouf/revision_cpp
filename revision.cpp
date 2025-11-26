@@ -4,6 +4,7 @@
 #include <cstdlib>  // gen nbre aleatoires
 #include <cctype>   // analyse des lettres
 #include <string>
+#include <utility> // pairs
 #include <vector>
 #include <list>
 #include<stack> // LIFO
@@ -19,6 +20,7 @@ using namespace std;
 
 void SL_heritageDuC(void);
 void lambdafunctions(void);
+void pairs(void);
 void vectors(void);
 void lists(void);
 void stacks_LIFO(void); // pile
@@ -48,6 +50,7 @@ int main()
 {
     //SL_heritageDuC(); // ctime, cstdlib, cctype
     //lambdafunctions();
+    pairs();
     //vectors();
     //lists();
     //stacks_LIFO();
@@ -55,7 +58,7 @@ int main()
     //threads_();
     //Check_Type_Example();
     //Callable_function_Exampel();
-    Operators_overloading_Example();
+    //Operators_overloading_Example();
 
 
     return 0;
@@ -116,6 +119,28 @@ void lambdafunctions(void)
     ->         : return_type
     auto nomLambdafct : nom de la fonction
     */
+}
+
+void pairs(void)
+{
+    // vector of pairs
+    std::vector<std::pair<int , std::string>> v;
+    
+    v.push_back({1, "un"});
+    v.push_back({2, "deux"});
+    v.push_back({3, "deux"});
+    
+    // methode 1
+    std::cout << "methode 1 " << std::endl;
+
+    for(auto p= v.begin() ; p!= v.end(); p++)
+        std::cout << "("<< p->first << "," << p->second <<")" <<std::endl;
+    
+    // methode 2     
+    std::cout << "methode 2 " << std::endl;
+    for(auto p : v)
+        std::cout << "("<< p.first << "," << p.second <<")" <<std::endl;
+
 }
 
 void vectors(void)
